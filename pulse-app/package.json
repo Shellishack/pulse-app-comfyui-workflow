@@ -1,0 +1,54 @@
+{
+  "name": "comfyui_workflow",
+  "displayName": "ComfyUI Workflow",
+  "description": "A ComfyUI workflow editing and automation tool",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "pulse-editor-marketplace": {
+    "visibility": "public"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "npm run clean && cross-env NODE_OPTIONS='--import=tsx' webpack --mode development --watch && tsx express.ts",
+    "build": "npm run clean && cross-env NODE_OPTIONS='--import=tsx' webpack --mode production",
+    "preview": "cross-env NODE_OPTIONS='--import=tsx' PREVIEW=true webpack serve --mode development",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@heroui/react": "^2.8.2",
+    "@heroui/theme": "^2.4.20",
+    "@module-federation/enhanced": "^0.18.3",
+    "@pulse-editor/react-api": "^0.1.1-alpha.24",
+    "@pulse-editor/shared-utils": "^0.1.1-alpha.24",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "html-webpack-plugin": "^5.6.4",
+    "material-icons": "^1.13.14",
+    "next-themes": "^0.4.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.12",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "cross-env": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.33.0",
+    "eslint-plugin-react": "^7.37.5",
+    "mini-css-extract-plugin": "^2.9.4",
+    "postcss": "^8.5.6",
+    "postcss-loader": "^8.1.1",
+    "rimraf": "^6.0.1",
+    "style-loader": "^4.0.0",
+    "tailwindcss": "^4.1.12",
+    "ts-loader": "^9.5.2",
+    "tsx": "^4.20.4",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.40.0",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2"
+  }
+}
