@@ -95,8 +95,24 @@ const previewConfig: WebpackConfig & DevServerConfig = {
     ],
   },
   devServer: {
+    host: "0.0.0.0",
+    allowedHosts: "all",
     port: 3030,
     hot: true, // Enable Hot Module Replacement
+    setupMiddlewares: (middlewares, devServer) => {
+      if (!devServer) {
+        throw new Error("webpack-dev-server is not defined");
+      }
+
+      devServer.app?.use((req, res, next) => {
+        if (req.headers.accept && req.headers.accept.includes("text/html")) {
+          console.log(`✅ [${req.method}] ${req.url}`);
+        }
+        next();
+      });
+
+      return middlewares;
+    },
   },
   mode: "development",
   stats: {

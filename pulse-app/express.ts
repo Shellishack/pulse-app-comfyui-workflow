@@ -6,12 +6,6 @@ const app = express();
 
 app.use(cors());
 
-// Log each request to the console
-app.use((req, res, next) => {
-  console.log(`✅ [${req.method}] Received: ${req.url}`);
-  return next();
-});
-
 app.use(`/${config.id}/${config.version}`, express.static("dist"));
 
 // Start the server
