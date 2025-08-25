@@ -132,7 +132,7 @@ export default function Service({
                 setIsDeployModelsOpen(true);
               }}
             >
-              Deploy Models
+              Request Models
             </Button>
 
             {workflow && (

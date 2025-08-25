@@ -1,5 +1,0 @@
-FROM ghcr.io/lecode-official/comfyui-docker:latest
-
-# Install docker cli tools to build RunPod serverless image
-
-CMD ["python", "build-server.py"]
