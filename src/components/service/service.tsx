@@ -1,9 +1,9 @@
-import { Alert, Button, Divider, Input, } from "@heroui/react";
+import { Alert, Button, Divider, Input } from "@heroui/react";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import Icon from "../utils/icon";
-import DeployModels from "../workflow/deploy-models";
-
+import RequestModelModal from "./request-model-modal";
+import AvailableModelModal from "./available-model-modal";
 
 type WorkflowUserInput = {
   nodeId: string;
@@ -31,6 +31,7 @@ export default function Service({
 }) {
   const [workflow, setWorkflow] = useState<Workflow | undefined>(undefined);
   const [isDeployModelsOpen, setIsDeployModelsOpen] = useState(false);
+  const [isAvailableModelsOpen, setIsAvailableModelsOpen] = useState(false);
 
   useEffect(() => {
     console.log("Workflows updated:", workflow);
@@ -135,6 +136,14 @@ export default function Service({
               Request Models
             </Button>
 
+            <Button
+              onPress={() => {
+                setIsAvailableModelsOpen(true);
+              }}
+            >
+              Available Models
+            </Button>
+
             {workflow && (
               <Button onPress={() => setWorkflow(undefined)}>
                 Import New Workflow
@@ -216,9 +225,9 @@ export default function Service({
             <Alert
               className="whitespace-pre-wrap"
               color="primary"
-              title="Deploy Models"
+              title="Use Models"
               description={`\
-In order to use serverless APIs for ComfyUI workflows, you must deploy your models ahead of calling APIs. Click "Deploy Models" to get started.`}
+In order to use serverless APIs for ComfyUI workflows, you can use already existing models. If your model is not available, you need to either request it or build your own docker image.`}
             />
 
             <Alert
@@ -262,7 +271,14 @@ You can also edit parameters of your workflow in this page, or connect to your C
           </div>
         )}
       </div>
-      <DeployModels isOpen={isDeployModelsOpen} setIsOpen={setIsDeployModelsOpen} />
+      <RequestModelModal
+        isOpen={isDeployModelsOpen}
+        setIsOpen={setIsDeployModelsOpen}
+      />
+      <AvailableModelModal
+        isOpen={isAvailableModelsOpen}
+        setIsOpen={setIsAvailableModelsOpen}
+      />
     </div>
   );
 }

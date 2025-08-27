@@ -1,14 +1,16 @@
-## Pulse Editor Extension Template
+## Pulse Editor ComfyUI Workflow Extension
 This is a React template which you can use to make your own Pulse Editor extension. It uses Webpack Module Federation to share extensions with Pulse Editor.
 
-## Get Started
-### Create Pulse Editor extension app using CLI
-```bash
-# Install Pulse Editor CLI
-npm i -g @pulse-editor/cli
-# Use CLI to create a React template project (based on this repository)
-pulse create
-```
+## Use custom models
+### Option 1: request models
+We add popular models to a shared network volume ([see RunPod's documentation](https://docs.runpod.io/serverless/storage/network-volumes)). But as of this early stage, we only add a limited number of models. If you wish your models to be added to our shared volume, you can request models by submitting the request form in app or open a GitHub issue here.
+
+### Option 2: build your own image
+Follow RunPod's guide on [how to customize ComfyUI Worker](https://github.com/runpod-workers/worker-comfyui/blob/main/docs/customization.md). 
+
+Then push the image to a public registry, and add url to your image in app (WIP).
+
+
 ### Start development
 #### Method 1: Install your extension in Pulse Editor as a dev extension
 Run the following to start a dev server locally.
