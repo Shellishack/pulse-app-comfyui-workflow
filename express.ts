@@ -9,12 +9,14 @@ import dotenv from "dotenv";
 import livereload from "livereload";
 import connectLivereload from "connect-livereload";
 
-dotenv.config();
+dotenv.config({
+  quiet: true,
+});
 
 const livereloadServer = livereload.createServer();
 livereloadServer.watch("dist");
 livereloadServer.server.once("connection", () => {
-  console.log("🔄 LiveReload connected");
+  console.log("✅ LiveReload connected");
 });
 
 const app = express();
@@ -35,8 +37,8 @@ if (isPreview) {
   /* Preview mode */
   app.use(express.static("dist/client"));
   app.use("/.server-function", express.static("dist/server"));
-  app.all("/server-function/:func", async (req, res) => {
-    const func = req.params.func;
+  app.all(/^\/server-function\/(.*)/, async (req, res) => {
+    const func = req.params[0];
 
     const url = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
 
@@ -50,7 +52,7 @@ if (isPreview) {
         : JSON.stringify(req.body),
     });
 
-    const { loadAndCall } = await import("./dist/preview/backend");
+    const { loadAndCall } = await import("./dist/preview/backend/index.cjs");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response = await loadAndCall(func, request);
 
@@ -64,14 +66,10 @@ if (isPreview) {
     }
   });
 
-  app.listen(3030, () => {
-    console.log("🚀 Preview server running on http://localhost:3030\n");
-  });
+  app.listen(3030);
 } else {
   /* Dev mode  */
   app.use(`/${pulseConfig.id}/${pulseConfig.version}`, express.static("dist"));
 
-  app.listen(3030, () => {
-    console.log("🚀 Dev server running on http://localhost:3030\n");
-  });
+  app.listen(3030);
 }
