@@ -6,7 +6,11 @@ export default async function list(req: Request) {
     return new Response("Method Not Allowed", { status: 405 });
   }
 
-  const models = await prisma.aIModel.findMany();
+  const models = await prisma.aIModel.findMany({
+    select: {
+      name: true,
+    }
+  });
 
   // Process the data and return a response
   return new Response(

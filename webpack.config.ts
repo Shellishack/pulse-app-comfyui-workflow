@@ -333,7 +333,12 @@ ${Object.entries(funcs)
 
 function compileServerFunctions(compiler) {
   // Remove existing entry points
-  fs.rmSync("dist/server", { recursive: true, force: true });
+  try {
+    fs.rmSync("dist/server", { recursive: true, force: true });
+  } catch (e) {
+    console.error("Error removing dist/server:", e);
+    console.log("Continuing...");
+  }
 
   // Run a new webpack compilation to pick up new server functions
   const options = {
@@ -357,7 +362,7 @@ function compileServerFunctions(compiler) {
       );
     } else {
       console.log(
-        `${getServerName()} ✅ Recompiled server functions successfully.`
+        `${getServerName()} ✅ Compiled server functions successfully.`
       );
     }
   });

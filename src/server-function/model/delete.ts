@@ -3,7 +3,7 @@ import { prisma } from "../../lib/db/prisma-client";
 
 /* An example function to echo the body of a POST request */
 export default async function add(req: Request) {
-  if (req.method !== "POST") {
+  if (req.method !== "DELETE") {
     return new Response("Method Not Allowed", { status: 405 });
   }
 
@@ -21,24 +21,23 @@ export default async function add(req: Request) {
   } = await req.json();
 
   try {
-    await prisma.aIModel.create({
-      data: {
+    await prisma.aIModel.delete({
+      where: {
         name,
       },
     });
   } catch (e) {
     return new Response(
-      JSON.stringify({ message: "Error adding model", error: e }),
+      JSON.stringify({ message: "Error deleting model", error: e }),
       {
         status: 500,
       }
     );
   }
-
   // Process the data and return a response
   return new Response(
     JSON.stringify({
-      message: "Model added successfully",
+      message: "Model deleted successfully",
     }),
     { status: 200 }
   );
