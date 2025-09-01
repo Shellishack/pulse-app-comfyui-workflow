@@ -8,16 +8,22 @@ import pulseConfig from "./pulse.config";
 import dotenv from "dotenv";
 import livereload from "livereload";
 import connectLivereload from "connect-livereload";
+import { networkInterfaces } from "os";
 
 dotenv.config({
   quiet: true,
 });
 
-const livereloadServer = livereload.createServer();
-livereloadServer.watch("dist");
-livereloadServer.server.once("connection", () => {
-  console.log("✅ LiveReload connected");
-});
+const isPreview = process.env.PREVIEW;
+const isDev = process.env.NODE_ENV;
+
+if (isDev || isPreview) {
+  const livereloadServer = livereload.createServer();
+  livereloadServer.watch("dist");
+  livereloadServer.server.once("connection", () => {
+    console.log("✅ LiveReload connected");
+  });
+}
 
 const app = express();
 app.use(cors());
@@ -30,8 +36,6 @@ app.use((req, res, next) => {
   console.log(`✅ [${req.method}] Received: ${req.url}`);
   return next();
 });
-
-const isPreview = process.env.PREVIEW;
 
 if (isPreview) {
   /* Preview mode */
@@ -67,9 +71,37 @@ if (isPreview) {
   });
 
   app.listen(3030);
-} else {
+} else if (isDev) {
   /* Dev mode  */
   app.use(`/${pulseConfig.id}/${pulseConfig.version}`, express.static("dist"));
 
   app.listen(3030);
+} else {
+  /* Production mode */
+  app.use(`/${pulseConfig.id}/${pulseConfig.version}`, express.static("dist"));
+
+  app.listen(3030, () => {
+    console.log(`\
+🎉 Your Pulse extension \x1b[1m${pulseConfig.displayName}\x1b[0m is LIVE! 
+
+⚡️ Local: http://localhost:3030/${pulseConfig.id}/${pulseConfig.version}/
+⚡️ Network: http://${getLocalNetworkIP()}:3030/${pulseConfig.id}/${
+      pulseConfig.version
+    }/
+
+✨ Try it out in the Pulse Editor and let the magic happen! 🚀`);
+  });
+}
+
+function getLocalNetworkIP() {
+  const interfaces = networkInterfaces();
+  for (const iface of Object.values(interfaces)) {
+    if (!iface) continue;
+    for (const config of iface) {
+      if (config.family === "IPv4" && !config.internal) {
+        return config.address; // Returns the first non-internal IPv4 address
+      }
+    }
+  }
+  return "localhost"; // Fallback
 }

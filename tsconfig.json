@@ -12,7 +12,7 @@
         "src/**/*",
         "pulse.config.ts",
         "preview/index.tsx",
-        "prisma",
+        "scripts/**/*"
     ],
     "exclude": [
         "node_modules",

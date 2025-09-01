@@ -1,11 +1,5 @@
-import {
-  Button,
-  Input,
-  Modal,
-  ModalContent,
-  ModalHeader,
-} from "@heroui/react";
-import React, { useState } from "react";
+import { Modal, ModalContent, ModalHeader } from "@heroui/react";
+import React from "react";
 
 export default function RequestModelModal({
   isOpen,
@@ -14,16 +8,6 @@ export default function RequestModelModal({
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }) {
-  const [model, setModel] = useState<{
-    url: string;
-    relativePath: string;
-    filename: string;
-  }>({
-    url: "",
-    relativePath: "",
-    filename: "",
-  });
-
   return (
     <Modal
       isOpen={isOpen}
@@ -36,33 +20,28 @@ export default function RequestModelModal({
           <ModalHeader className="flex flex-col w-full items-center">
             Request Model
           </ModalHeader>
-          <Input
-            label="URL"
-            placeholder="Only .safetensors files are allowed"
-            value={model.url}
-            onValueChange={(value) => {
-              setModel({ ...model, url: value });
-            }}
-          />
-          <Input
-            label="relative-path"
-            placeholder="e.g. models/checkpoints"
-            value={model.relativePath}
-            onValueChange={(value) => {
-              setModel({ ...model, relativePath: value });
-            }}
-          />
+          <p>
+            If you would like to request a model to be added to this official
+            hosted Pulse App, please submit an issue on our{" "}
+            <a
+              href="https://github.com/Shellishack/pulse-app-comfyui-workflow"
+              className="text-primary"
+            >
+              GitHub repository
+            </a>
+          </p>.
 
           <p>
-            If you&apos;d like to build your own docker image, please refer to{" "}
-            <a href="https://github.com/runpod-workers/worker-comfyui" className="text-primary">
-              RunPod&apos;s documentation
+            Model request is not guaranteed to be fulfilled. If you&apos;d like
+            to customize this app or add models yourself, please refer to{" "}
+            <a
+              href="https://github.com/Shellishack/pulse-app-comfyui-workflow"
+              className="text-primary"
+            >
+              GitHub repository
             </a>
+            .
           </p>
-
-          <div className="w-full flex flex-col">
-            <Button color="primary">Request</Button>
-          </div>
         </div>
       </ModalContent>
     </Modal>

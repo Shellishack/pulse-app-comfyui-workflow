@@ -9,6 +9,7 @@ import { NodeFederationPlugin } from "@module-federation/node";
 import path from "path";
 import { globSync } from "glob";
 import fs from "fs";
+import CopyWebpackPlugin from "copy-webpack-plugin";
 
 function getLocalNetworkIP() {
   const interfaces = networkInterfaces();
@@ -59,6 +60,9 @@ const previewClientConfig: WebpackConfig & DevServerConfig = {
     }),
     new MiniCssExtractPlugin({
       filename: "globals.css",
+    }),
+    new CopyWebpackPlugin({
+      patterns: [{ from: "src/assets", to: "assets" }],
     }),
     {
       apply: (compiler) => {
@@ -181,6 +185,10 @@ const mfClientConfig: WebpackConfig & DevServerConfig = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: "globals.css",
+    }),
+    // Copy assets to dist
+    new CopyWebpackPlugin({
+      patterns: [{ from: "src/assets", to: "assets" }],
     }),
     new ModuleFederationPlugin({
       // Do not use hyphen character '-' in the name
@@ -384,7 +392,6 @@ const mfServerConfig: WebpackConfig = {
     extensions: [".ts", ".js"],
   },
   plugins: [
-    // makeNodeFederationPlugin(),
     {
       apply: (compiler) => {
         if (compiler.options.mode === "development") {
@@ -426,6 +433,7 @@ const mfServerConfig: WebpackConfig = {
             if (stats.hasErrors()) {
               console.log(`${getServerName()} ❌ Failed to build server.`);
             } else {
+              compileServerFunctions(compiler);
               console.log(`${getServerName()} ✅ Successfully built server.`);
             }
           });

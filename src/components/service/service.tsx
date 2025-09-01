@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import Icon from "../utils/icon";
 import RequestModelModal from "./request-model-modal";
-import AvailableModelModal from "./available-model-modal";
+import WorkerConfigModal from "./worker-config-modal";
 
 type WorkflowUserInput = {
   nodeId: string;
@@ -128,20 +128,9 @@ export default function Service({
         <div className="flex gap-x-1">
           <div className="w-full flex items-center gap-x-2">
             <p className="text-lg">ComfyUI Workflow API</p>
-            <Button
-              onPress={() => {
-                setIsDeployModelsOpen(true);
-              }}
-            >
-              Request Models
-            </Button>
 
-            <Button
-              onPress={() => {
-                setIsAvailableModelsOpen(true);
-              }}
-            >
-              Available Models
+            <Button onPress={() => setIsAvailableModelsOpen(true)}>
+              View Worker Configuration
             </Button>
 
             {workflow && (
@@ -151,7 +140,26 @@ export default function Service({
             )}
           </div>
 
-          <div>
+          <div className="flex gap-x-1">
+            <Button
+              variant="light"
+              onPress={() => {
+                window.open(
+                  "https://github.com/shellishack/pulse-app-comfyui-workflow",
+                  "_blank"
+                );
+              }}
+              isIconOnly
+            >
+              <Icon uri="assets/github-mark-dark" extension=".svg" />
+            </Button>
+            <Button
+              onPress={() => {
+                setIsDeployModelsOpen(true);
+              }}
+            >
+              Request Models
+            </Button>
             <Button
               onPress={() => {
                 toggleViewMode();
@@ -163,119 +171,121 @@ export default function Service({
           </div>
         </div>
 
-        {workflow ? (
-          <div className="h-full w-full grid grid-rows-[auto_max-content] overflow-y-auto gap-y-1">
-            <div className="h-full overflow-y-auto overflow-x-hidden">
-              <p className="text-center text-xl">{workflow.name}</p>
-              <div className="flex flex-col">
-                {workflow.userInput.map((userInput, index) => (
-                  <div key={userInput.nodeId}>
-                    <div className="bg-content3 p-2 rounded-lg flex flex-col gap-y-1">
-                      <p>Node Name: {userInput.title}</p>
-                      <p>Results will be used in:</p>
-                      <div className="flex gap-x-1">
-                        {userInput.outputTo.map((output, index) => (
-                          <div
-                            key={index}
-                            className="bg-primary text-primary-foreground rounded-full px-2"
-                          >
-                            {`${output.title}:${output.input}`}
-                          </div>
-                        ))}
-                      </div>
+        <div className="flex flex-col gap-y-1">
+          <Alert
+            className="whitespace-pre-wrap"
+            color="primary"
+            title="Use Models"
+            description={`\
+In order to use serverless APIs for ComfyUI workflows, you can use already existing models. If your model is not available, you need to either request it, or deploy this app yourself (see our GitHub).`}
+          />
 
-                      <p>Inputs:</p>
-                      {Object.entries(userInput.inputs).map(
-                        ([key, value], index) => (
-                          <Input
-                            key={index}
-                            label={`${key} (${typeof value})`}
-                            value={value as string}
-                            onChange={(e) => {
-                              const newValue = e.target.value;
-
-                              const type = typeof value;
-
-                              if (type === "number") {
-                                userInput.inputs[key] = Number(newValue);
-                              } else if (type === "string") {
-                                userInput.inputs[key] = newValue;
-                              }
-
-                              setWorkflow({ ...workflow });
-                            }}
-                          />
-                        )
-                      )}
-                    </div>
-
-                    {index < workflow.userInput.length - 1 && (
-                      <div className="py-4">
-                        <Divider />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-            <Button color="primary">Run</Button>
-          </div>
-        ) : (
-          <div className="w-full h-full flex flex-col gap-y-1">
-            <Alert
-              className="whitespace-pre-wrap"
-              color="primary"
-              title="Use Models"
-              description={`\
-In order to use serverless APIs for ComfyUI workflows, you can use already existing models. If your model is not available, you need to either request it or build your own docker image.`}
-            />
-
-            <Alert
-              className="whitespace-pre-wrap"
-              color="primary"
-              title="Serverless Workflow API Usage"
-              description={`\
+          <Alert
+            className="whitespace-pre-wrap"
+            color="primary"
+            title="Serverless Workflow API Usage"
+            description={`\
 Import a ComfyUI workflow to start generating AI content via RESTful API (WIP) or Pulse Editor IMC.
 You can also edit parameters of your workflow in this page, or connect to your ComfyUI server to do advanced editing.`}
-            />
+          />
 
-            <div className="w-full h-full border-dashed border-2 border-divider rounded-lg bg-content2 text-content2-foreground">
-              <Dropzone
-                onDrop={onDrop}
-                accept={{
-                  "application/json": [".json"],
-                }}
-                multiple={false}
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <section className="w-full h-full">
-                    <div
-                      {...getRootProps()}
-                      className="w-full h-full cursor-pointer"
-                    >
-                      <input {...getInputProps()} />
-                      <div className="w-full h-full flex flex-col items-center justify-center">
-                        <div className="flex flex-col items-center gap-y-1.5 text-lg">
-                          <p className="text-center">
-                            Drag and drop your ComfyUI workflows (API format)
-                            here.
-                          </p>
-                          <p>Or, click to select workflow files.</p>
+          {workflow ? (
+            <div className="h-full w-full grid grid-rows-[auto_max-content] overflow-y-auto gap-y-1">
+              <div className="h-full overflow-y-auto overflow-x-hidden">
+                <p className="text-center text-xl">{workflow.name}</p>
+                <div className="flex flex-col">
+                  {workflow.userInput.map((userInput, index) => (
+                    <div key={userInput.nodeId}>
+                      <div className="bg-content3 p-2 rounded-lg flex flex-col gap-y-1">
+                        <p>Node Name: {userInput.title}</p>
+                        <p>Results will be used in:</p>
+                        <div className="flex gap-x-1">
+                          {userInput.outputTo.map((output, index) => (
+                            <div
+                              key={index}
+                              className="bg-primary text-primary-foreground rounded-full px-2"
+                            >
+                              {`${output.title}:${output.input}`}
+                            </div>
+                          ))}
+                        </div>
+
+                        <p>Inputs:</p>
+                        {Object.entries(userInput.inputs).map(
+                          ([key, value], index) => (
+                            <Input
+                              key={index}
+                              label={`${key} (${typeof value})`}
+                              value={value as string}
+                              onChange={(e) => {
+                                const newValue = e.target.value;
+
+                                const type = typeof value;
+
+                                if (type === "number") {
+                                  userInput.inputs[key] = Number(newValue);
+                                } else if (type === "string") {
+                                  userInput.inputs[key] = newValue;
+                                }
+
+                                setWorkflow({ ...workflow });
+                              }}
+                            />
+                          )
+                        )}
+                      </div>
+
+                      {index < workflow.userInput.length - 1 && (
+                        <div className="py-4">
+                          <Divider />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <Button color="primary">Run</Button>
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col gap-y-1">
+              <div className="w-full h-full border-dashed border-2 border-divider rounded-lg bg-content2 text-content2-foreground">
+                <Dropzone
+                  onDrop={onDrop}
+                  accept={{
+                    "application/json": [".json"],
+                  }}
+                  multiple={false}
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <section className="w-full h-full">
+                      <div
+                        {...getRootProps()}
+                        className="w-full h-full cursor-pointer"
+                      >
+                        <input {...getInputProps()} />
+                        <div className="w-full h-full flex flex-col items-center justify-center">
+                          <div className="flex flex-col items-center gap-y-1.5 text-lg">
+                            <p className="text-center">
+                              Drag and drop your ComfyUI workflows (API format)
+                              here.
+                            </p>
+                            <p>Or, click to select workflow files.</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
+                    </section>
+                  )}
+                </Dropzone>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <RequestModelModal
         isOpen={isDeployModelsOpen}
         setIsOpen={setIsDeployModelsOpen}
       />
-      <AvailableModelModal
+      <WorkerConfigModal
         isOpen={isAvailableModelsOpen}
         setIsOpen={setIsAvailableModelsOpen}
       />

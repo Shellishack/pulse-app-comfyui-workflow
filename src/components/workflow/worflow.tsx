@@ -25,10 +25,22 @@ export default function Workflow({
                 setInputValue(value);
               }
             }}
-            size="sm"
+            className="h-10"
           />
         </div>
-        <div>
+        <div className="flex gap-x-1">
+          <Button
+            variant="light"
+            onPress={() => {
+              window.open(
+                "https://github.com/shellishack/pulse-app-comfyui-workflow",
+                "_blank"
+              );
+            }}
+            isIconOnly
+          >
+            <Icon uri="assets/github-mark-dark" extension=".svg" />
+          </Button>
           <Button
             onPress={() => {
               toggleViewMode();
