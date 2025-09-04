@@ -7,7 +7,7 @@ import {
 
 config();
 
-const comfyuiWorkerImageName = "runpod/worker-comfyui:5.4.0-base";
+const comfyuiWorkerImageName = "claypulse/runpod-comfyui-worker:latest";
 const comfyuiWorkerTemplateName = "comfyui-worker-template";
 const comfyuiWorkerNetworkVolumeName = "comfyui-worker-network-volume";
 const comfyuiWorkerEndpointName = "comfyui-worker-endpoint";
