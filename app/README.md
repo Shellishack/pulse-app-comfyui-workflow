@@ -8,7 +8,7 @@ This Pulse App allows running serverless ComfyUI Workflow on RunPod.
 
 We add popular models to a shared network volume ([see RunPod's documentation](https://docs.runpod.io/serverless/storage/network-volumes)). But as of this early stage, we only add a limited number of models. If you wish your models to be added to our shared volume, you can request models by submitting the request form in app (coming soon in marketplace page support) or opening a GitHub issue here.
 
-If you'd like to add your own models or customize this app, see [below](#deploy-this-pulse-app-yourself).
+If you'd like to add your own models or customize this app, see [app/scripts/README.md](scripts/README.md).
 
 ## Deploy This Pulse App Yourself
 
@@ -37,35 +37,7 @@ For this app, you'd also need to set environment variable for your published app
 Then you can find your published app in marketplace tab in public/unlisted/private category depending on your settings.
 
 ### Manage models and endpoint types
-
-There are a few scripts in `scripts/` to help you quickly setup RunPod.
-
-Create serverless endpoint and volume:
-
-```bash
-tsx ./scripts/create.ts
-```
-
-Delete endpoint:
-
-```bash
-# Volume and template won't be deleted in case you want to re-use them.
-# Note: volume will still charge money. If you want to delete them, visit RunPod's website.
-tsx ./scripts/delete.ts
-```
-
-### Upload models
-
-To add your own models, you can do so by uploading to S3-compatible network volumes. For more details, see https://docs.runpod.io/serverless/storage/s3-api.
-
-For example, you can use comfy-cli to download models. Then you can upload with aws cli:
-```bash
-# Download models via comfy-cli allows valid ComfyUI paths
-comfy model download --url <model_url> --relative-path models/checkpoints
-# Upload to S3 bucket via aws-cli
-aws s3 cp --region us-ks-2 --endpoint-url https://s3api-us-ks-2.runpod.io --recursive ~/comfy/ComfyUI/ s3://<your_bucket_id> --exclude ".*" --exclude "*/.*" --expected-size 5000000000
-```
-> If the file is too large and upload fails with aws-cli, try this method from RunPod: https://docs.runpod.io/serverless/storage/s3-api#uploading-very-large-files.
+See [app/scripts/README.md](scripts/README.md).
 
 ### Start development
 

@@ -8,7 +8,8 @@ export default function WorkerConfigModal({
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-}) {
+  }) {
+  
   const { data: gpus, isLoading: isLoadingGPUs } = useSWR<string[] | undefined>(
     "/server-function/runpod/get-gpus",
     (url: string) => fetch(url).then((res) => res.json())

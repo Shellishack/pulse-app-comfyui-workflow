@@ -1,0 +1,21 @@
+# start from a clean base image (replace <version> with the desired release)
+# FROM runpod/worker-comfyui:5.4.1-base
+
+# Use temporary custom development image until this issue is fixed:
+# https://github.com/runpod-workers/worker-comfyui/pull/166 
+# Fork: https://github.com/Shellishack/worker-comfyui
+FROM shellishack/worker-comfyui:dev
+
+ARG MODEL_DIR
+
+# install multi-gpu support nodes
+RUN comfy node install ComfyUI-MultiGPU
+# install remote media loader nodes
+RUN comfy node install comfyui_remote_media_io
+
+# install custom node dependencies
+RUN cd /comfyui/custom_nodes/comfyui_remote_media_io && \
+    pip install .[dev]
+
+# move models to image
+COPY ${MODEL_DIR} /comfyui/models
