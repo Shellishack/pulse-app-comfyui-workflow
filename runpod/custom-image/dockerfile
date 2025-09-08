@@ -8,8 +8,6 @@ FROM shellishack/worker-comfyui:dev
 
 ARG MODEL_DIR
 
-# install multi-gpu support nodes
-RUN comfy node install ComfyUI-MultiGPU
 # install remote media loader nodes
 RUN comfy node install comfyui_remote_media_io
 
