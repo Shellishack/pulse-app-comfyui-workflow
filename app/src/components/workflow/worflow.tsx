@@ -13,7 +13,7 @@ export default function Workflow({
     <div className="w-full h-full grid grid-rows-[max-content_auto] gap-y-2">
       <div className="flex gap-x-1 items-center">
         <div className="w-full flex items-center gap-x-2">
-          <p className="text-lg">ComfyUI</p>
+          <p className="text-lg text-nowrap">ComfyUI Edit</p>
           <Input
             label="ComfyUI Server URL"
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -42,6 +42,8 @@ export default function Workflow({
             <Icon uri="assets/github-mark-dark" extension=".svg" />
           </Button>
           <Button
+            color="primary"
+            variant="bordered"
             onPress={() => {
               toggleViewMode();
             }}

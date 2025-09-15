@@ -10,7 +10,7 @@ config();
 const comfyuiWorkerImageName = "claypulse/runpod-comfyui-worker:latest";
 const comfyuiWorkerTemplateName = "comfyui-worker-template";
 const comfyuiWorkerNetworkVolumeName = "comfyui-worker-network-volume";
-const comfyuiWorkerEndpointName = "comfyui-worker-endpoint";
+const comfyuiWorkerEndpointName = "comfyui-worker-shared";
 // Use S3-compatible regions. See https://docs.runpod.io/serverless/storage/s3-api#datacenter-availability
 const comfyuiWorkerRegion = "US-KS-2";
 const gpus = [

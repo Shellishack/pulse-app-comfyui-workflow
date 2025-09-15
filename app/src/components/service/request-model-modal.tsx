@@ -29,7 +29,8 @@ export default function RequestModelModal({
             >
               GitHub repository
             </a>
-          </p>.
+            .
+          </p>
 
           <p>
             Model request is not guaranteed to be fulfilled. If you&apos;d like

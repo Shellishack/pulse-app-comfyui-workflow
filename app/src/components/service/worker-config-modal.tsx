@@ -5,13 +5,14 @@ import useSWR from "swr";
 export default function WorkerConfigModal({
   isOpen,
   setIsOpen,
+  endpointName,
 }: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  }) {
-  
+  endpointName: string;
+}) {
   const { data: gpus, isLoading: isLoadingGPUs } = useSWR<string[] | undefined>(
-    "/server-function/runpod/get-gpus",
+    `/server-function/runpod/get-gpus?endpointName=${endpointName}`,
     (url: string) => fetch(url).then((res) => res.json())
   );
   const { data: s3Data, isLoading: isLoadingS3 } = useSWR<string[] | undefined>(
@@ -48,7 +49,7 @@ export default function WorkerConfigModal({
             ) : (
               s3Data?.map((model) => (
                 <div key={model} className="flex items-center gap-x-1">
-                  <p className="flex-1">- {model}</p>
+                  <p className="flex-1 text-nowrap">- {model}</p>
                 </div>
               ))
             )}
